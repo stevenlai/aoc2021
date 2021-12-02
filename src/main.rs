@@ -1,21 +1,22 @@
-use std::fs;
 use std::str::FromStr;
 
 fn main() {
-    let contents = fs::read_to_string("day1.txt").unwrap();
+    let contents = helpers::get_data_from_file("day1.txt");
+    println!("Day 1a: {:?}", day1a(&contents));
+    println!("Day 1b: {:?}", day1b(&contents));
 
-    let contents = contents.as_str();
-    println!("Day 1a: {:?}", day1a(contents));
-    println!("Day 1b: {:?}", day1b(contents));
-
-    let contents = fs::read_to_string("day2.txt").unwrap();
-
-    let contents = contents.as_str();
-    println!("Day2: {:?}", day2a(contents));
-    println!("Day2: {:?}", day2b(contents));
+    let contents = helpers::get_data_from_file("day2.txt");
+    println!("Day2: {:?}", day2a(&contents));
+    println!("Day2: {:?}", day2b(&contents));
 }
 
-fn day1a(data: &str) -> usize {
+mod helpers {
+    pub fn get_data_from_file(path: &str) -> String {
+        std::fs::read_to_string(path).unwrap()
+    }
+}
+
+fn day1a(data: &String) -> usize {
     data.lines()
         .map(|d| d.parse::<u32>().unwrap())
         .collect::<Vec<u32>>()
@@ -24,7 +25,7 @@ fn day1a(data: &str) -> usize {
         .count()
 }
 
-fn day1b(data: &str) -> usize {
+fn day1b(data: &String) -> usize {
     data.lines()
         .map(|d| d.parse::<u32>().unwrap())
         .collect::<Vec<u32>>()
@@ -55,7 +56,7 @@ impl FromStr for Direction {
     }
 }
 
-fn day2a(data: &str) -> u32 {
+fn day2a(data: &String) -> u32 {
     let depths: Vec<Vec<&str>> = data
         .lines()
         .map(|m| m.split(" ").collect::<Vec<&str>>())
@@ -76,7 +77,7 @@ fn day2a(data: &str) -> u32 {
     horizontal * depth
 }
 
-fn day2b(data: &str) -> u32 {
+fn day2b(data: &String) -> u32 {
     let depths: Vec<Vec<&str>> = data
         .lines()
         .map(|m| m.split(" ").collect::<Vec<&str>>())
@@ -103,7 +104,8 @@ fn day2b(data: &str) -> u32 {
 
 #[test]
 fn test_day1() {
-    let input = "199
+    let input = String::from(
+        "199
 200
 208
 210
@@ -112,21 +114,24 @@ fn test_day1() {
 240
 269
 260
-263";
+263",
+    );
 
-    assert_eq!(day1a(input), 7);
-    assert_eq!(day1b(input), 5);
+    assert_eq!(day1a(&input), 7);
+    assert_eq!(day1b(&input), 5);
 }
 
 #[test]
 fn test_day2() {
-    let input = "forward 5
+    let input = String::from(
+        "forward 5
 down 5
 forward 8
 up 3
 down 8
-forward 2";
+forward 2",
+    );
 
-    assert_eq!(day2a(input), 150);
-    assert_eq!(day2b(input), 900);
+    assert_eq!(day2a(&input), 150);
+    assert_eq!(day2b(&input), 900);
 }
