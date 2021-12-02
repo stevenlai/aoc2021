@@ -56,10 +56,10 @@ impl FromStr for Direction {
 }
 
 fn day2a(data: &str) -> u32 {
-    let depths = data
+    let depths: Vec<Vec<&str>> = data
         .lines()
         .map(|m| m.split(" ").collect::<Vec<&str>>())
-        .collect::<Vec<Vec<&str>>>();
+        .collect();
 
     let mut horizontal: u32 = 0;
     let mut depth: u32 = 0;
@@ -77,10 +77,10 @@ fn day2a(data: &str) -> u32 {
 }
 
 fn day2b(data: &str) -> u32 {
-    let depths = data
+    let depths: Vec<Vec<&str>> = data
         .lines()
         .map(|m| m.split(" ").collect::<Vec<&str>>())
-        .collect::<Vec<Vec<&str>>>();
+        .collect();
 
     let mut horizontal: u32 = 0;
     let mut depth: u32 = 0;
