@@ -57,45 +57,35 @@ impl FromStr for Direction {
 }
 
 fn day2a(data: &String) -> u32 {
-    let depths = data
-        .lines()
-        .map(|m| m.split(" ").collect::<Vec<&str>>());
+    let depths = data.lines().map(|m| m.split(" ").collect::<Vec<&str>>());
 
-    let mut horizontal: u32 = 0;
-    let mut depth: u32 = 0;
-
-    for m in depths {
-        let val: u32 = m[1].parse::<u32>().unwrap();
+    let (horizontal, depth) = depths.fold((0, 0), |(horizontal, depth), m| {
+        let val = m[1].parse::<u32>().unwrap();
         match Direction::from_str(m[0]).unwrap() {
-            Direction::Forward => horizontal = horizontal + val,
-            Direction::Down => depth = depth + val,
-            Direction::Up => depth = depth - val,
+            Direction::Forward => (horizontal + val, depth),
+            Direction::Down => (horizontal, depth + val),
+            Direction::Up => (horizontal, depth - val),
         }
-    }
+    });
 
     horizontal * depth
 }
 
 fn day2b(data: &String) -> u32 {
-    let depths = data
-        .lines()
-        .map(|m| m.split(" ").collect::<Vec<&str>>());
+    let depths = data.lines().map(|m| m.split(" ").collect::<Vec<&str>>());
 
-    let mut horizontal: u32 = 0;
-    let mut depth: u32 = 0;
-    let mut aim: u32 = 0;
-
-    for m in depths {
-        let val: u32 = m[1].parse::<u32>().unwrap();
+    let (horizontal, depth, _) = depths.fold((0, 0, 0), |(horizontal, depth, aim), m| {
+        let val = m[1].parse::<u32>().unwrap();
         match Direction::from_str(m[0]).unwrap() {
-            Direction::Forward => {
-                horizontal = horizontal + val;
-                depth = depth + (val * aim);
-            }
-            Direction::Down => aim = aim + val,
-            Direction::Up => aim = aim - val,
+            Direction::Forward => (
+                horizontal + m[1].parse::<u32>().unwrap(),
+                depth + (val * aim),
+                aim,
+            ),
+            Direction::Down => (horizontal, depth, aim + val),
+            Direction::Up => (horizontal, depth, aim - val),
         }
-    }
+    });
 
     horizontal * depth
 }
