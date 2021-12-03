@@ -96,7 +96,7 @@ fn day2b(data: &String) -> u32 {
 }
 
 fn day3a(data: &String) -> u32 {
-    let grid: Vec<Vec<u8>> = data 
+    let grid: Vec<Vec<u8>> = data
         .lines()
         .map(|d| {
             d.trim()
@@ -108,15 +108,15 @@ fn day3a(data: &String) -> u32 {
         .collect();
 
     let l = grid[0].len();
-    let mut one_count = Vec::new();
-    for i in 0..l {
-        one_count.push(grid.iter().filter(|g| g[i] == 1).count());
-    }
+    let one_count = (0..l).fold(vec![], |mut acc, i| {
+        acc.push(grid.iter().filter(|g| g[i] == 1).count());
+        acc
+    });
 
-    let mut zero_count = Vec::new();
-    for i in 0..l {
-        zero_count.push(grid.iter().filter(|g| g[i] == 0).count());
-    }
+    let zero_count = (0..l).fold(vec![], |mut acc, i| {
+        acc.push(grid.iter().filter(|g| g[i] == 0).count());
+        acc
+    });
 
     let gamma = one_count
         .iter()
@@ -190,5 +190,4 @@ fn test_day3() {
     );
 
     assert_eq!(day3a(&input), 198)
-
 }
