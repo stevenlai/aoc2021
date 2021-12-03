@@ -6,8 +6,11 @@ fn main() {
     println!("Day 1b: {:?}", day1b(&contents));
 
     let contents = helpers::get_data_from_file("day2.txt");
-    println!("Day2: {:?}", day2a(&contents));
-    println!("Day2: {:?}", day2b(&contents));
+    println!("Day2a: {:?}", day2a(&contents));
+    println!("Day2b: {:?}", day2b(&contents));
+
+    let contents = helpers::get_data_from_file("day3.txt");
+    println!("Day 3a: {:?}", day3a(&contents))
 }
 
 mod helpers {
@@ -92,6 +95,49 @@ fn day2b(data: &String) -> u32 {
     horizontal * depth
 }
 
+fn day3a(data: &String) -> u32 {
+    let grid: Vec<Vec<u8>> = data 
+        .lines()
+        .map(|d| {
+            d.trim()
+                .split("")
+                .filter(|x| !x.is_empty())
+                .map(|x| x.parse::<u8>().unwrap())
+                .collect::<Vec<u8>>()
+        })
+        .collect();
+
+    let l = grid[0].len();
+    let mut one_count = Vec::new();
+    for i in 0..l {
+        one_count.push(grid.iter().filter(|g| g[i] == 1).count());
+    }
+
+    let mut zero_count = Vec::new();
+    for i in 0..l {
+        zero_count.push(grid.iter().filter(|g| g[i] == 0).count());
+    }
+
+    let gamma = one_count
+        .iter()
+        .zip(zero_count.iter())
+        .map(|(o, z)| if o > z { "1" } else { "0" })
+        .collect::<Vec<&str>>()
+        .join("");
+
+    let epsilon = one_count
+        .iter()
+        .zip(zero_count.iter())
+        .map(|(o, z)| if o < z { "1" } else { "0" })
+        .collect::<Vec<&str>>()
+        .join("");
+
+    let gamma = u32::from_str_radix(&gamma, 2).unwrap();
+    let epsilon = u32::from_str_radix(&epsilon, 2).unwrap();
+
+    gamma * epsilon
+}
+
 #[test]
 fn test_day1() {
     let input = String::from(
@@ -124,4 +170,25 @@ forward 2",
 
     assert_eq!(day2a(&input), 150);
     assert_eq!(day2b(&input), 900);
+}
+
+#[test]
+fn test_day3() {
+    let input = String::from(
+        "00100
+11110
+10110
+10111
+10101
+01111
+00111
+11100
+10000
+11001
+00010
+01010",
+    );
+
+    assert_eq!(day3a(&input), 198)
+
 }
